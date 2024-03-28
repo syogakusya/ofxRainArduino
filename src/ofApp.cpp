@@ -1,6 +1,7 @@
 #include "ofApp.h"
 
 const int num = 20;
+const int rainNum = 4;
 
 void Raindrop::setup(float x, float y) {
 	isActive = false;
@@ -61,8 +62,8 @@ void ofApp::setup(){
 		cout << a.getDeviceID()<<" : "<<a.getDeviceName() << endl;
 	}
 
-	sendDetectSerial.setup("COM9", 9600);
-	recieveHeartBeatSerial.setup("COM6", 9600);
+	sendDetectSerial.setup("COM6", 9600);
+	recieveHeartBeatSerial.setup("COM4", 9600);
 
 	obstacles.clear();
 	raindrops.clear();
@@ -79,25 +80,31 @@ void ofApp::setup(){
 
 	Obstacle obstacle;
 	for (int i = 0; i < 5; i++) {
-		obstacle.setup((ofGetWindowWidth() / 5) * (i+1) - 100, 300, 20 , (i+1));
+		obstacle.setup((ofGetWindowWidth() / 5) * (i+1) - 100, 300, 40 , (i+1));
 		obstacles.push_back(obstacle);
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	if (recieveHeartBeatSerial.available()) {
-		char h = recieveHeartBeatSerial.readByte();
-		if (h == 'h') {
-			cout << "Heart Beat beat it !!" << endl;
-			int j = 0;
-			for (int i = 0; j < 2; i++) {
-				if (!raindrops[i].isActive) {
-					raindrops[i].isActive = true;
-					j++;
-				}
-				if (raindrops.size() < i) {
-					break;
+	if (recieveHeartBeatSerial.isInitialized()) {
+		if (recieveHeartBeatSerial.available()) {
+			char h = recieveHeartBeatSerial.readByte();
+			if (h == 'h') {
+				cout << "Heart Beat beat it !!" << endl;
+				for (int i = 0; i < rainNum; i++) {
+					bool procceing = true;
+					int j = 0;
+					while (procceing && j < raindrops.size() - 1) {
+						if (!raindrops[j].isActive) {
+							raindrops[j].isActive = true;
+							procceing = false;
+							break;
+						}
+						else {
+							j++;
+						}
+					}
 				}
 			}
 		}
@@ -169,7 +176,23 @@ void ofApp::keyPressed(int key){
 	}
 	if (key == 'f') {
 		ofToggleFullscreen();
+	}
+	if (key == 'r') {
 
+		for (int i = 0; i < rainNum; i++) {
+			bool procceing = true;
+			int j = 0;
+			while (procceing && j < raindrops.size() - 1) {
+				if (!raindrops[j].isActive) {
+					raindrops[j].isActive = true;
+					procceing = false;
+					break;
+				}
+				else {
+					j++;
+				}
+			}
+		}
 	}
 }
 
