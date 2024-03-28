@@ -2,6 +2,28 @@
 
 #include "ofMain.h"
 
+// 雨滴を表すクラス
+class Raindrop {
+public:
+	ofVec2f position;
+	bool isActive;
+	float speed;
+	void setup(float x, float y);
+	void update();
+	void draw();
+	void reset();
+};
+
+// 障害物を表すクラス
+class Obstacle {
+public:
+	ofVec2f position;
+	float radius;
+	int number;
+	void setup(float x, float y, float r, float num);
+	void draw();
+};
+
 class ofApp : public ofBaseApp{
 
 	public:
@@ -21,6 +43,8 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
-		ofSerial mySerial;
-		
+		ofSerial sendDetectSerial;
+		ofSerial recieveHeartBeatSerial;
+		vector<Raindrop> raindrops;
+		vector<Obstacle> obstacles;
 };

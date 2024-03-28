@@ -7,6 +7,12 @@
 		<ClCompile Include="src\main.cpp">
 			<Filter>src</Filter>
 		</ClCompile>
+		<ClCompile Include="src\main.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\ofApp.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
 		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp">
 			<Filter>addons\ofxGui\src</Filter>
 		</ClCompile>
@@ -43,16 +49,19 @@
 			<UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="addons">
-			<UniqueIdentifier>{7A92DE95--760-0-40-62-B-FA0-948AF8101D68}</UniqueIdentifier>
+			<UniqueIdentifier>{3352BFCA--E29-8-42-D1-8-33E-6AD9913581AB}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="addons\ofxGui">
-			<UniqueIdentifier>{F97EC1DA--8DC-A-49-2E-8-4CA-0709F9CB4ACF}</UniqueIdentifier>
+			<UniqueIdentifier>{AF8030AE--B8E-8-47-CD-A-310-7067471A07EB}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="addons\ofxGui\src">
-			<UniqueIdentifier>{691F6B1E--E5E-B-4A-B2-8-FC9-2172ADEFD49D}</UniqueIdentifier>
+			<UniqueIdentifier>{E1213FDE--660-A-47-73-8-244-E13144ACC8F8}</UniqueIdentifier>
 		</Filter>
 	</ItemGroup>
 	<ItemGroup>
+		<ClInclude Include="src\ofApp.h">
+			<Filter>src</Filter>
+		</ClInclude>
 		<ClInclude Include="src\ofApp.h">
 			<Filter>src</Filter>
 		</ClInclude>
