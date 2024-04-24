@@ -1,1 +1,2 @@
+ofxBloom-master
 ofxGui

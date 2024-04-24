@@ -13,6 +13,9 @@
 		<ClCompile Include="src\ofApp.cpp">
 			<Filter>src</Filter>
 		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBloom-master\src\ofxBlur.cpp">
+			<Filter>addons\ofxBloom-master\src</Filter>
+		</ClCompile>
 		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp">
 			<Filter>addons\ofxGui\src</Filter>
 		</ClCompile>
@@ -49,13 +52,19 @@
 			<UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="addons">
-			<UniqueIdentifier>{3352BFCA--E29-8-42-D1-8-33E-6AD9913581AB}</UniqueIdentifier>
+			<UniqueIdentifier>{C1C6AAE5--902-A-41-5C-8-339-73DC81F2FCEE}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBloom-master">
+			<UniqueIdentifier>{4F822A68--103-0-44-56-8-C1F-660A1495511F}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBloom-master\src">
+			<UniqueIdentifier>{5EB9B3D6--417-7-43-3E-A-5E9-3F84E9C1AFD6}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="addons\ofxGui">
-			<UniqueIdentifier>{AF8030AE--B8E-8-47-CD-A-310-7067471A07EB}</UniqueIdentifier>
+			<UniqueIdentifier>{4B2F61F9--A1C-E-48-A2-9-D46-D7E249C3998E}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="addons\ofxGui\src">
-			<UniqueIdentifier>{E1213FDE--660-A-47-73-8-244-E13144ACC8F8}</UniqueIdentifier>
+			<UniqueIdentifier>{1A4242EA--810-7-4D-F7-A-262-96F88A60BFBC}</UniqueIdentifier>
 		</Filter>
 	</ItemGroup>
 	<ItemGroup>
@@ -64,6 +73,12 @@
 		</ClInclude>
 		<ClInclude Include="src\ofApp.h">
 			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBloom-master\src\ofxBloom.h">
+			<Filter>addons\ofxBloom-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBloom-master\src\ofxBlur.h">
+			<Filter>addons\ofxBloom-master\src</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h">
 			<Filter>addons\ofxGui\src</Filter>

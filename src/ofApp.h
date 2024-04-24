@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxBloom.h"
+#include "ofxGui.h"
 
 // ‰J“H‚ð•\‚·ƒNƒ‰ƒX
 class Raindrop {
@@ -8,9 +10,10 @@ public:
 	ofVec2f position;
 	bool isActive;
 	float speed;
+	float radius;
 	void setup(float x, float y);
-	void update();
-	void draw();
+	void update(float rainRadius, float rainMaxSpeed, float rainMinSpeed);
+	void draw(float rainRadius);
 	void reset();
 };
 
@@ -47,4 +50,26 @@ class ofApp : public ofBaseApp{
 		ofSerial recieveHeartBeatSerial;
 		vector<Raindrop> raindrops;
 		vector<Obstacle> obstacles;
+
+		float realTime;
+		float timeLastTryConnect;
+		std::vector<ofSerialDeviceInfo> deviceList;
+
+		ofxPanel gui;
+		ofxGuiGroup Group_DrawContents;
+		ofxFloatSlider RainRadius;
+		ofxFloatSlider RainMaxSpeed;
+		ofxFloatSlider RainMinSpeed;
+		ofxGuiGroup Group_Bloom;
+		ofxFloatSlider scale;
+		ofxFloatSlider thresh;
+		ofxFloatSlider brightness;
+		ofxToggle b_EnableBloom;
+
+		ofxBloom bloom;
+		ofFbo fbo;
+
+		void setup_GUI();
+
+		bool doDrawGUI;
 };

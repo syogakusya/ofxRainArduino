@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-const int num = 20;
+const int num = 40;
 const int rainNum = 4;
 
 void Raindrop::setup(float x, float y) {
@@ -8,9 +8,11 @@ void Raindrop::setup(float x, float y) {
 	position.set(x, y);
 }
 
-void Raindrop::update() {
+void Raindrop::update(float rainRadius, float rainMaxSpeed, float rainMinSpeed) {
 	if (isActive) {
-		position.y += speed;
+		//speed = ofRandom(rainMinSpeed, rainMaxSpeed);
+		radius = rainRadius;
+		position.y = position.y + speed;
 		if (position.y > ofGetWindowHeight()) {
 			isActive = false;
 			position.y = 0;
@@ -25,12 +27,12 @@ void Raindrop::update() {
 	//}
 }
 
-void Raindrop::draw() {
+void Raindrop::draw(float rainRadius) {
 	if (isActive) {
-		ofDrawCircle(position.x, position.y, 2);
+		ofDrawCircle(position.x, position.y, rainRadius);
 		ofPushStyle();
-		ofDrawCircle(position.x, position.y - 2, 1.5);
-		ofDrawCircle(position.x, position.y - 3, 1);
+		ofDrawCircle(position.x, position.y - rainRadius*1.1, rainRadius*0.9);
+		ofDrawCircle(position.x, position.y - rainRadius*1.2, rainRadius*0.8);
 		ofPopStyle();
 	}
 }
@@ -62,8 +64,8 @@ void ofApp::setup(){
 		cout << a.getDeviceID()<<" : "<<a.getDeviceName() << endl;
 	}
 
-	sendDetectSerial.setup("COM6", 9600);
-	recieveHeartBeatSerial.setup("COM4", 9600);
+	sendDetectSerial.setup("COM4", 9600);
+	recieveHeartBeatSerial.setup("COM6", 9600);
 
 	obstacles.clear();
 	raindrops.clear();
@@ -74,19 +76,48 @@ void ofApp::setup(){
 		Raindrop raindrop;
 		//raindrop.setup(ofRandom(ofGetWindowWidth()), ofRandom(ofGetWindowHeight()));
 		raindrop.setup(ofRandom(ofGetWindowWidth()), 0);
-		raindrop.speed = ofRandom(3, 5);
+		raindrop.speed = ofRandom(RainMinSpeed, RainMaxSpeed);
+		raindrop.radius = RainRadius;
 		raindrops.push_back(raindrop);
 	}
 
 	Obstacle obstacle;
 	for (int i = 0; i < 5; i++) {
-		obstacle.setup((ofGetWindowWidth() / 5) * (i+1) - 100, 300, 40 , (i+1));
+		obstacle.setup((ofGetWindowWidth() / 5) * (i+1) - 100, 750, 30 , (i+1));
 		obstacles.push_back(obstacle);
 	}
+
+	
+	ofDisableArbTex();
+	fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight());
+	ofEnableArbTex();
+
+	bloom.setup(fbo.getWidth(), fbo.getHeight(), fbo);
+	setup_GUI();
+}
+
+void ofApp :: setup_GUI() {
+	gui.setup();
+	doDrawGUI = false;
+	Group_DrawContents.setup("DrawContents");
+	Group_DrawContents.add(RainMaxSpeed.setup("RainMaxSpeed", 5, 1, 30));
+	Group_DrawContents.add(RainMinSpeed.setup("RainMinSpeed", 3, 1, 30));
+	Group_DrawContents.add(RainRadius.setup("RainRadius", 10, 1, 30));
+	gui.add(&Group_DrawContents);
+
+	Group_Bloom.setup("Bloom");
+	Group_Bloom.add(scale.setup("Scale", 2.3f, 0.1f, 16.0f));
+	Group_Bloom.add(brightness.setup("Brightness", 5.0f, 0.0f, 30.0f));
+	Group_Bloom.add(thresh.setup("Threshold", 0.0f, 0.0f, 1.0f));
+	Group_Bloom.add(b_EnableBloom.setup("b_EnableBloom", true));
+	gui.add(&Group_Bloom);
+
+	gui.minimizeAll();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+
 	if (recieveHeartBeatSerial.isInitialized()) {
 		if (recieveHeartBeatSerial.available()) {
 			char h = recieveHeartBeatSerial.readByte();
@@ -110,8 +141,9 @@ void ofApp::update(){
 		}
 	}
 
+
 	for (auto& raindrop : raindrops) {
-		raindrop.update();
+		raindrop.update(RainRadius, RainMaxSpeed, RainMinSpeed);
 	}
 
 	for (auto& obstacle : obstacles) {
@@ -147,14 +179,27 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	ofSetColor(255, 255, 255);
-	for (auto& raindrop : raindrops) {
-		raindrop.draw();
-	}
-	ofSetColor(255, 0, 0);
+	fbo.begin();
+	ofClear(0);
+	ofSetColor(24, 235, 249);
+	for (auto& raindrop : raindrops)
+		raindrop.draw(RainRadius);
+	/*ofSetColor(255, 0, 0);
 	for (auto& obstacle : obstacles) {
 		obstacle.draw();
+	}*/
+	fbo.end();
+	if (b_EnableBloom) {
+		bloom.setBrightness(brightness);
+		bloom.setScale(scale);
+		bloom.setThreshold(thresh);
+		bloom.process();
 	}
+
+	if (b_EnableBloom) bloom.getResultFbo().draw(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
+	else    fbo.draw(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
+	if(doDrawGUI)
+		gui.draw();
 }
 
 //--------------------------------------------------------------
@@ -192,6 +237,14 @@ void ofApp::keyPressed(int key){
 					j++;
 				}
 			}
+		}
+	}
+	if (key == 'g') {
+		doDrawGUI = !doDrawGUI;
+	}
+	if (key == 's') {
+		for (auto& raindrop : raindrops) {
+			raindrop.speed = ofRandom(RainMinSpeed, RainMaxSpeed);
 		}
 	}
 }
